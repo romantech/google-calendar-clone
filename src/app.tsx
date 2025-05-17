@@ -1,9 +1,9 @@
-import { useAppDispatch, useAppSelector } from './store/hooks';
-import { increment } from './store/counter-slice';
-import Calendar from '@/components/calendar';
+import { increment, selectCount, useAppDispatch, useAppSelector } from '@/store';
+import { Calendar } from '@/components';
+import { cn } from '@/lib';
 
 function App() {
-  const count = useAppSelector((state) => state.counter.value);
+  const count = useAppSelector(selectCount);
   const dispatch = useAppDispatch();
 
   return (
@@ -12,7 +12,7 @@ function App() {
       <div>{`count: ${count}`}</div>
       <button
         type="button"
-        className="cursor-pointer"
+        className={cn('cursor-pointer')}
         onClick={() => {
           dispatch(increment());
         }}

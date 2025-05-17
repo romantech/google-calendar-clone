@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import type { RootState } from './root-store';
+import type { RootState } from '@/store';
 
 // Define a type for the slice state
 interface CounterState {
@@ -33,5 +33,3 @@ export const counterSlice = createSlice({
 export const { increment, decrement, incrementByAmount } = counterSlice.actions;
 
 export const selectCount = (state: RootState) => state.counter.value;
-
-export default counterSlice.reducer;
