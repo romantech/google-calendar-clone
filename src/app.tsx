@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import { increment } from './store/counter-slice';
+import Calendar from '@/components/calendar';
 
 function App() {
   const count = useAppSelector((state) => state.counter.value);
@@ -18,6 +19,7 @@ function App() {
       >
         Increment
       </button>
+      <Calendar />
     </main>
   );
 }
