@@ -1,10 +1,6 @@
-import {
-  DayPicker as ReactDatePicker,
-  type DayPickerProps,
-  type ModifiersClassNames,
-} from 'react-day-picker';
+import { DayPicker as ReactDatePicker } from 'react-day-picker';
 import 'react-day-picker/style.css';
-import { format, isToday } from 'date-fns'; // isToday 임포트
+import { format, isSameDay, isToday } from 'date-fns'; // isToday 임포트
 import { ko } from 'date-fns/locale';
 import {
   selectSelectedDate,
@@ -15,15 +11,6 @@ import {
   useAppSelector,
 } from '@/store';
 import { toDate } from '@/lib/utils';
-
-const modifiers: DayPickerProps['modifiers'] = {
-  // 오늘 날짜는 hover 해도 배경색 유지, 오늘이 아닌 날짜는 hover 시 회색으로 표시하기 위해 modifier 사용
-  notToday: (date: Date) => !isToday(date),
-};
-
-const modifiersClassNames: ModifiersClassNames = {
-  notToday: 'hover:bg-slate-200',
-};
 
 export default function DatePicker() {
   const dispatch = useAppDispatch();
@@ -38,6 +25,13 @@ export default function DatePicker() {
     dispatch(setSelectedMonth(date?.toISOString()));
   };
 
+  const isHoverable = (date: Date) => {
+    const selected = toDate(selectedDate);
+    if (!selected) return false;
+    // 오늘 날짜가 아니고, 선택된 날짜도 아닌 경우에만 호버 배경 적용하기 위한 조건
+    return !isToday(date) && !isSameDay(date, selected);
+  };
+
   const formatCaption = (date: Date) => format(date, 'yyyy년 M월');
 
   return (
@@ -50,12 +44,12 @@ export default function DatePicker() {
         month={toDate(selectedMonth)}
         selected={toDate(selectedDate)}
         onMonthChange={onMonthChange}
-        onDayClick={onSelect}
-        modifiers={modifiers}
-        modifiersClassNames={modifiersClassNames}
+        onSelect={onSelect}
+        modifiers={{ hoverable: isHoverable }}
+        modifiersClassNames={{ hoverable: 'hover:bg-slate-200' }}
         classNames={{
-          selected: 'bg-sky-200 rounded-full',
-          today: 'bg-blue-700 text-white rounded-full',
+          selected: 'bg-sky-200',
+          today: '!bg-blue-700 text-white',
           day: 'rounded-full',
           weekday: 'text-xs font-normal',
           weekdays: 'size-8',

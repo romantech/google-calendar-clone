@@ -1,17 +1,16 @@
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib';
-import { jumpToToday, useAppDispatch } from '@/store';
+import { moveToToday, useAppDispatch } from '@/store';
 
 interface JumpToTodayProps {
   className?: string;
-  label?: string;
 }
 
-export default function JumpToToday({ className, label = '오늘' }: JumpToTodayProps) {
+export default function Today({ className }: JumpToTodayProps) {
   const dispatch = useAppDispatch();
 
   const onSelect = () => {
-    dispatch(jumpToToday());
+    dispatch(moveToToday());
   };
 
   return (
@@ -19,12 +18,12 @@ export default function JumpToToday({ className, label = '오늘' }: JumpToToday
       onClick={onSelect}
       variant="ghost"
       className={cn(
-        'cursor-pointer rounded-full border border-gray-700 px-5 hover:bg-slate-200',
+        'cursor-pointer rounded-full border border-gray-700 px-5 hover:bg-slate-200 active:bg-slate-300',
         className,
       )}
       size="lg"
     >
-      {label}
+      오늘
     </Button>
   );
 }
