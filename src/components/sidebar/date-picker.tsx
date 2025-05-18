@@ -1,8 +1,21 @@
-import { DayPicker as ReactDatePicker } from 'react-day-picker';
+import {
+  DayPicker as ReactDatePicker,
+  type DayPickerProps,
+  type ModifiersClassNames,
+} from 'react-day-picker';
 import 'react-day-picker/style.css';
-import { format } from 'date-fns';
+import { format, isToday } from 'date-fns'; // isToday 임포트
 import { ko } from 'date-fns/locale';
 import { setSelectedDate, useAppDispatch, useAppSelector } from '@/store';
+
+const modifiers: DayPickerProps['modifiers'] = {
+  // 오늘 날짜는 hover 해도 배경색 유지, 오늘이 아닌 날짜는 hover 시 회색으로 표시하기 위해 modifier 사용
+  notToday: (date: Date) => !isToday(date),
+};
+
+const modifiersClassNames: ModifiersClassNames = {
+  notToday: 'hover:bg-slate-200',
+};
 
 export default function DatePicker() {
   const selectedDate = useAppSelector((state) => state.calendar.selectedDate);
@@ -23,10 +36,12 @@ export default function DatePicker() {
         mode="single"
         selected={selectedDate}
         onSelect={onSelect}
+        modifiers={modifiers}
+        modifiersClassNames={modifiersClassNames}
         classNames={{
           selected: 'bg-sky-200 rounded-full',
           today: 'bg-blue-700 text-white rounded-full',
-          day: 'rounded-full hover:bg-slate-200',
+          day: 'rounded-full',
           weekday: 'text-xs font-normal',
           weekdays: 'size-8',
           day_button: 'cursor-pointer text-xs size-8',
