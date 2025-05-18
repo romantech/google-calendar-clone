@@ -3,7 +3,7 @@ import { AlignJustify } from 'lucide-react';
 
 export default function MenuToggle() {
   return (
-    <Button variant="ghost" className="hover:bg-hover size-12 cursor-not-allowed rounded-full">
+    <Button variant="ghost" className="size-12 cursor-not-allowed rounded-full hover:bg-slate-200">
       <AlignJustify className="size-5" />
     </Button>
   );

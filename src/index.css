@@ -10,10 +10,6 @@
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
 
   --color-surface-container-low: #f8fafd;
-  --color-outline: #747775;
-  --color-hover: rgba(60, 64, 67, 0.08);
-  --color-surface: #1f1f1f;
-  --color-surface-variant: #444746;
 }
 
 @theme inline {

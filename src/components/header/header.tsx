@@ -3,7 +3,7 @@ import Navigator from './navigator';
 import MonthLabel from './month-label';
 import MenuToggle from './menu-toggle';
 import AppBrand from './app-brand';
-import JumpToToday from './jump-to-today';
+import Today from './today.tsx';
 import Search from './search.tsx';
 import Support from '@/components/header/support';
 import Settings from '@/components/header/settings';
@@ -21,7 +21,7 @@ export default function Header({ className }: HeaderProps) {
         <AppBrand />
       </section>
       <section className="flex items-center">
-        <JumpToToday className="mr-5" />
+        <Today className="mr-5" />
         <Navigator />
         <MonthLabel />
       </section>
