@@ -19,7 +19,7 @@
     "strict": true,
     // ESLint 규칙이랑 겹쳐서 Off
     //    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    //    "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
