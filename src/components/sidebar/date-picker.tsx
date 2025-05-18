@@ -6,7 +6,15 @@ import {
 import 'react-day-picker/style.css';
 import { format, isToday } from 'date-fns'; // isToday 임포트
 import { ko } from 'date-fns/locale';
-import { setSelectedDate, useAppDispatch, useAppSelector } from '@/store';
+import {
+  selectSelectedDate,
+  selectSelectedMonth,
+  setSelectedDate,
+  setSelectedMonth,
+  useAppDispatch,
+  useAppSelector,
+} from '@/store';
+import { toDate } from '@/lib/utils';
 
 const modifiers: DayPickerProps['modifiers'] = {
   // 오늘 날짜는 hover 해도 배경색 유지, 오늘이 아닌 날짜는 hover 시 회색으로 표시하기 위해 modifier 사용
@@ -18,23 +26,30 @@ const modifiersClassNames: ModifiersClassNames = {
 };
 
 export default function DatePicker() {
-  const selectedDate = useAppSelector((state) => state.calendar.selectedDate);
   const dispatch = useAppDispatch();
+  const selectedDate = useAppSelector(selectSelectedDate);
+  const selectedMonth = useAppSelector(selectSelectedMonth);
 
-  const onSelect = (date: Date | undefined) => {
-    dispatch(setSelectedDate(date));
+  const onSelect = (date?: Date) => {
+    dispatch(setSelectedDate(date?.toISOString()));
   };
+
+  const onMonthChange = (date?: Date) => {
+    dispatch(setSelectedMonth(date?.toISOString()));
+  };
+
+  const formatCaption = (date: Date) => format(date, 'yyyy년 M월');
 
   return (
     <section>
       <ReactDatePicker
         locale={ko}
-        formatters={{
-          formatCaption: (date, options) => format(date, 'yyyy년 M월', options),
-        }}
+        formatters={{ formatCaption }}
         animate
         mode="single"
-        selected={selectedDate}
+        month={toDate(selectedMonth)}
+        onMonthChange={onMonthChange}
+        selected={toDate(selectedDate)}
         onSelect={onSelect}
         modifiers={modifiers}
         modifiersClassNames={modifiersClassNames}

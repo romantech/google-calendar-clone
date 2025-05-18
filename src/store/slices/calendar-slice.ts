@@ -1,23 +1,31 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { RootState } from '@/store';
+import type { ISOString } from '@/types';
 
-// Define a type for the slice state
 interface CalendarState {
-  selectedDate: Date | undefined;
+  selectedDate: ISOString | null;
+  selectedMonth: ISOString | null;
 }
 
-// Define the initial state using that type
 const initialState: CalendarState = {
-  selectedDate: undefined,
+  selectedDate: null,
+  selectedMonth: new Date().toISOString(),
 };
 
 export const calendarSlice = createSlice({
   name: 'calendar',
   initialState,
   reducers: {
-    setSelectedDate: (state, action: PayloadAction<Date | undefined>) => {
-      state.selectedDate = action.payload;
+    setSelectedDate: (state, action: PayloadAction<ISOString | undefined>) => {
+      state.selectedDate = action.payload ?? null;
+    },
+    setSelectedMonth: (state, action: PayloadAction<ISOString | undefined>) => {
+      state.selectedMonth = action.payload ?? null;
     },
   },
 });
 
-export const { setSelectedDate } = calendarSlice.actions;
+export const { setSelectedDate, setSelectedMonth } = calendarSlice.actions;
+
+export const selectSelectedDate = (state: RootState) => state.calendar.selectedDate;
+export const selectSelectedMonth = (state: RootState) => state.calendar.selectedMonth;
