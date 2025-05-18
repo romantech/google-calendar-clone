@@ -17,7 +17,7 @@ export default function WeekView() {
         <div className="grid grid-cols-[4rem_0.625rem_repeat(7,_1fr)]">
           {/* ——— 헤더 행 ——— */}
           <div /> {/* 좌상단 빈공간 셀 */}
-          <div /> {/* 타임 라벨 우측 경계용 셀 */}
+          <div /> {/* 시간 라벨 우측 경계용 셀 */}
           {days.map((day) => (
             <div key={day.toString()} className="flex flex-col items-center p-2">
               <span>{format(day, 'EEE', { locale: ko })}</span>
@@ -29,7 +29,7 @@ export default function WeekView() {
         {/* ——— 타임존 + 올데이 행 ——— */}
         <div className="grid grid-cols-[4rem_0.625rem_repeat(7,_1fr)_0.9375rem]">
           <div className="justify-self-end pr-2 text-xs">GMT +9</div>
-          <div className="border-r border-b border-slate-200" /> {/* 타임 라벨 우측 경계용 셀 */}
+          <div className="border-r border-b border-slate-200" /> {/* 시간 라벨 우측 경계용 셀 */}
           <div className="col-span-7 grid grid-cols-7 divide-x divide-slate-200 border-b">
             {days.map((day) => (
               <div key={day.toString()} className={cn('cursor-pointer hover:bg-slate-100')} />
@@ -39,7 +39,7 @@ export default function WeekView() {
         </div>
       </div>
 
-      {/* 스크롤 가능한 타임슬롯 부분 */}
+      {/* 스크롤 가능한 타임슬롯 영역 */}
       <div className="overflow-y-auto">
         <div className="grid grid-cols-[4rem_0.625rem_repeat(7,_1fr)] grid-rows-[repeat(24,_3rem)]">
           {/* ——— 타임슬롯 ——— */}
@@ -47,10 +47,15 @@ export default function WeekView() {
             <Fragment key={rowIdx}>
               {/* 시간 라벨 (첫 행은 숨김) */}
               <div className="relative">
-                {rowIdx !== 0 && (
-                  <span className="absolute right-2 -translate-y-1/2 text-xs">{time}</span>
-                )}
+                <span
+                  className={cn('absolute right-2 -translate-y-1/2 text-xs', {
+                    invisible: rowIdx === 0,
+                  })}
+                >
+                  {time}
+                </span>
               </div>
+              {/* 시간 라벨 우측 경계용 셀 */}
               <div
                 className={cn('border-r border-slate-200', {
                   'border-b': rowIdx !== dailyTimeSlots.length - 1,
