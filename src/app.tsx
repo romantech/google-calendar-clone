@@ -1,5 +1,4 @@
-import { Calendar, Header } from '@/components';
-import { Sidebar } from '@/components/sidebar';
+import { Calendar, Header, Sidebar } from '@/components';
 
 function App() {
   return (
