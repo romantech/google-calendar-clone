@@ -11,7 +11,7 @@ export default function JumpToToday({ className, label = '오늘' }: JumpToToday
     <Button
       variant="ghost"
       className={cn(
-        'text-surface hover:bg-hover border-outline cursor-pointer rounded-full border px-5',
+        'cursor-pointer rounded-full border border-gray-700 px-5 hover:bg-slate-200',
         className,
       )}
       size="lg"

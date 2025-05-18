@@ -1,10 +1,14 @@
 import { Calendar, Header } from '@/components';
+import { Sidebar } from '@/components/sidebar';
 
 function App() {
   return (
     <main className="min-h-screen">
       <Header />
-      <Calendar />
+      <div className="flex">
+        <Sidebar />
+        <Calendar />
+      </div>
     </main>
   );
 }

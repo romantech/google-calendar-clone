@@ -9,11 +9,11 @@ interface NavigatorProps {
 export default function Navigator({ className }: NavigatorProps) {
   return (
     <section className={cn('flex items-center', className)}>
-      <Button variant="ghost" className="hover:bg-hover size-8 cursor-pointer rounded-full">
-        <ChevronLeft className="text-surface-variant size-5 stroke-[2.2px]" />
+      <Button variant="ghost" className="size-8 cursor-pointer rounded-full hover:bg-slate-200">
+        <ChevronLeft className="size-5 stroke-[2.2px] text-gray-700" />
       </Button>
-      <Button variant="ghost" className="hover:bg-hover size-8 cursor-pointer rounded-full">
-        <ChevronRight className="text-surface-variant size-5 stroke-[2.2px]" />
+      <Button variant="ghost" className="size-8 cursor-pointer rounded-full hover:bg-slate-200">
+        <ChevronRight className="size-5 stroke-[2.2px] text-gray-700" />
       </Button>
     </section>
   );

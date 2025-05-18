@@ -11,7 +11,7 @@ export default function ViewSwitcher({ className }: ViewSwitcherProps) {
     <Button
       variant="ghost"
       className={cn(
-        'text-surface hover:bg-hover border-outline cursor-pointer rounded-full border',
+        'cursor-pointer rounded-full border border-gray-700 hover:bg-slate-200',
         className,
       )}
       size="lg"
