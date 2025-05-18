@@ -43,14 +43,14 @@ export default function DatePicker() {
   return (
     <section>
       <ReactDatePicker
+        animate
         locale={ko}
         formatters={{ formatCaption }}
-        animate
         mode="single"
         month={toDate(selectedMonth)}
-        onMonthChange={onMonthChange}
         selected={toDate(selectedDate)}
-        onSelect={onSelect}
+        onMonthChange={onMonthChange}
+        onDayClick={onSelect}
         modifiers={modifiers}
         modifiersClassNames={modifiersClassNames}
         classNames={{

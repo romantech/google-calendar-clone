@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib';
-import { setSelectedMonth, useAppDispatch } from '@/store';
+import { jumpToToday, useAppDispatch } from '@/store';
 
 interface JumpToTodayProps {
   className?: string;
@@ -11,7 +11,7 @@ export default function JumpToToday({ className, label = '오늘' }: JumpToToday
   const dispatch = useAppDispatch();
 
   const onSelect = () => {
-    dispatch(setSelectedMonth(new Date().toISOString()));
+    dispatch(jumpToToday());
   };
 
   return (
