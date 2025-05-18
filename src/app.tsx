@@ -1,24 +1,9 @@
-import { increment, selectCount, useAppDispatch, useAppSelector } from '@/store';
-import { Calendar } from '@/components';
-import { cn } from '@/lib';
+import { Calendar, Header } from '@/components';
 
 function App() {
-  const count = useAppSelector(selectCount);
-  const dispatch = useAppDispatch();
-
   return (
-    <main>
-      <h1 className="underline">Hello world!</h1>
-      <div>{`count: ${count}`}</div>
-      <button
-        type="button"
-        className={cn('cursor-pointer')}
-        onClick={() => {
-          dispatch(increment());
-        }}
-      >
-        Increment
-      </button>
+    <main className="min-h-screen">
+      <Header />
       <Calendar />
     </main>
   );
