@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { counterSlice } from '@/store/slices';
+import { calendarSlice } from '@/store/slices';
 
 export const store = configureStore({
   reducer: {
-    counter: counterSlice.reducer,
+    calendar: calendarSlice.reducer,
   },
 });
 
