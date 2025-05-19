@@ -1,7 +1,5 @@
 # google-calendar-clone
 
----
-
 ![스크린샷](./src/assets/screenshot.png)
 
 - 메인 스택: React + Vite, Tailwind CSS, Redux Toolkit, Shadcn
