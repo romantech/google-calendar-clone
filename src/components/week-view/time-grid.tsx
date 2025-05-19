@@ -13,7 +13,7 @@ interface TimeGridProps {
 export default function TimeGrid({ days, events, timeSlots }: TimeGridProps) {
   return (
     <div className="overflow-y-auto">
-      <div className="grid grid-cols-[4rem_0.625rem_repeat(7,_1fr)] grid-rows-[repeat(24,_3rem)]">
+      <div className="grid grid-cols-[4rem_0.625rem_repeat(7,minmax(5rem,_1fr))] grid-rows-[repeat(24,_3rem)]">
         {timeSlots.map((timeSlot, rowIdx) => (
           <Fragment key={rowIdx}>
             <TimeLabel
