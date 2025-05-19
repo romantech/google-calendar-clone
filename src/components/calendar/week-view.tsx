@@ -1,14 +1,30 @@
 import { Fragment } from 'react';
 import { format, parseISO } from 'date-fns';
-import { selectSelectedDate, useAppSelector } from '@/store';
-import { cn, generateTimeSlots, getWeekDays } from '@/lib';
+import {
+  type CalendarEvent,
+  selectEventsForWeek,
+  selectSelectedDate,
+  useAppSelector,
+} from '@/store';
+import {
+  calculateEventHeight,
+  cn,
+  eventStartsAtSlot,
+  formatEventTime,
+  generateTimeSlots,
+  getEventsForDay,
+  getWeekDays,
+} from '@/lib';
 import { ko } from 'date-fns/locale';
+
+const dailyTimeSlots = generateTimeSlots();
 
 export default function WeekView() {
   const selectedDate = useAppSelector(selectSelectedDate);
   const baseDate = selectedDate ? parseISO(selectedDate) : new Date();
+
   const days = getWeekDays({ baseDate });
-  const dailyTimeSlots = generateTimeSlots();
+  const events = useAppSelector(selectEventsForWeek);
 
   return (
     <div className="flex h-full flex-col">
@@ -43,7 +59,7 @@ export default function WeekView() {
       <div className="overflow-y-auto">
         <div className="grid grid-cols-[4rem_0.625rem_repeat(7,_1fr)] grid-rows-[repeat(24,_3rem)]">
           {/* ——— 타임슬롯 ——— */}
-          {dailyTimeSlots.map((time, rowIdx) => (
+          {dailyTimeSlots.map((timeSlot, rowIdx) => (
             <Fragment key={rowIdx}>
               {/* 시간 라벨 (첫 행은 숨김) */}
               <div className="relative">
@@ -52,7 +68,7 @@ export default function WeekView() {
                     invisible: rowIdx === 0,
                   })}
                 >
-                  {time}
+                  {format(timeSlot, 'a h시', { locale: ko })}
                 </span>
               </div>
               {/* 시간 라벨 우측 경계용 셀 */}
@@ -62,15 +78,37 @@ export default function WeekView() {
                 })}
               />
               {/* 타임블록 */}
-              {days.map((day, dayIdx) => (
-                <div
-                  key={`${day.toString()}-${rowIdx}`}
-                  className={cn('h-full cursor-pointer hover:bg-slate-100', {
-                    'border-r': dayIdx !== days.length - 1,
-                    'border-b': rowIdx !== dailyTimeSlots.length - 1,
-                  })}
-                />
-              ))}
+              {days.map((day, dayIdx) => {
+                const dayEvents = getEventsForDay(events, day);
+                const eventsStartingAtThisSlot = dayEvents.filter((ev) =>
+                  eventStartsAtSlot(ev, timeSlot),
+                );
+
+                return (
+                  <div
+                    key={`${day.toString()}-${rowIdx}`}
+                    className={cn('relative cursor-pointer text-xs hover:bg-slate-100', {
+                      'border-r': dayIdx !== days.length - 1,
+                      'border-b': rowIdx !== dailyTimeSlots.length - 1,
+                    })}
+                  >
+                    {eventsStartingAtThisSlot.map((ev: CalendarEvent) => {
+                      return (
+                        <div
+                          key={ev.id}
+                          className="absolute right-0 left-0 overflow-hidden rounded bg-blue-200 p-1"
+                          style={{ height: `${calculateEventHeight(ev)}px`, zIndex: 10 }}
+                        >
+                          <div className="font-medium">{ev.title}</div>
+                          <div className="text-xs text-gray-600">
+                            {formatEventTime(ev.startTime)} - {formatEventTime(ev.endTime)}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })}
             </Fragment>
           ))}
         </div>
