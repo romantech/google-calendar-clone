@@ -1,4 +1,4 @@
-import { type Control, useForm } from 'react-hook-form';
+import { type Control, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/form';
 import { nanoid } from 'nanoid';
 import type { CalendarEvent } from '@/store';
-import { addHours, format, isAfter } from 'date-fns';
+import { addHours, format, isAfter, isBefore, isSameHour } from 'date-fns';
 import {
   Select,
   SelectContent,
@@ -135,6 +135,12 @@ interface TimeSelectProps {
 }
 
 export function TimeSelect({ control, name, label, timeSlots, placeholder }: TimeSelectProps) {
+  const startTime = useWatch({ control, name: 'startTime' });
+
+  const shouldDisabled = (date: Date) => {
+    if (name === 'endTime') return isBefore(date, startTime) || isSameHour(date, startTime);
+  };
+
   return (
     <FormField
       control={control}
@@ -155,7 +161,11 @@ export function TimeSelect({ control, name, label, timeSlots, placeholder }: Tim
             </FormControl>
             <SelectContent>
               {timeSlots.map((slot) => (
-                <SelectItem key={`${name}-${slot.isoString}`} value={slot.isoString}>
+                <SelectItem
+                  disabled={shouldDisabled(slot.date)}
+                  key={`${name}-${slot.isoString}`}
+                  value={slot.isoString}
+                >
                   {slot.formattedTime}
                 </SelectItem>
               ))}
