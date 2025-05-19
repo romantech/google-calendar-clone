@@ -1,1 +1,2 @@
-export * from './calendar-slice.ts';
+export * from './calendar-slice';
+export * from './event-slice';

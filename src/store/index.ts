@@ -1,3 +1,3 @@
-export * from './slices/calendar-slice.ts';
+export * from './slices';
 export * from './root-store';
 export * from './hooks';

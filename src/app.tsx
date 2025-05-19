@@ -1,13 +1,9 @@
-import { Calendar, Header, Sidebar } from '@/components';
+import { Calendar } from '@/components';
 
 function App() {
   return (
     <main>
-      <Header />
-      <div className="flex h-[calc(100vh-4rem)]">
-        <Sidebar />
-        <Calendar />
-      </div>
+      <Calendar />
     </main>
   );
 }
