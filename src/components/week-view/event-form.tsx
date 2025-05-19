@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/form';
 import { nanoid } from 'nanoid';
 import type { CalendarEvent } from '@/store';
-import { addHours, format } from 'date-fns';
+import { addHours, format, isAfter } from 'date-fns';
 import {
   Select,
   SelectContent,
@@ -23,19 +23,16 @@ import {
 } from '@/components/ui/select';
 import { useRef } from 'react';
 
-// Zod 스키마 정의 - Date 객체 사용
 const formSchema = z
   .object({
     title: z.string().min(1, '제목을 입력해주세요'),
     startTime: z.date(),
     endTime: z.date(),
   })
-  .refine(
-    (data) => {
-      return data.endTime > data.startTime;
-    },
-    { message: '종료 시간은 시작 시간보다 늦어야 합니다', path: ['endTime'] },
-  );
+  .refine((data) => isAfter(data.endTime, data.startTime), {
+    message: '종료 시간은 시작 시간보다 이후여야 합니다',
+    path: ['endTime'],
+  });
 
 type FormValues = z.infer<typeof formSchema>;
 

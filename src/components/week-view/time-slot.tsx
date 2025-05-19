@@ -1,5 +1,4 @@
 import { addEvent, type CalendarEvent, removeEvent, useAppDispatch } from '@/store';
-
 import { cn, eventStartsAtSlot } from '@/lib';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useState } from 'react';
@@ -43,9 +42,9 @@ export default function TimeSlot({
           })}
         >
           {eventsStartingAtThisSlot.map((ev: CalendarEvent) => (
-            <ContextMenu>
+            <ContextMenu key={ev.id}>
               <ContextMenuTrigger>
-                <EventItem key={ev.id} event={ev} />
+                <EventItem event={ev} />
               </ContextMenuTrigger>
               <ContextMenuContent className="min-w-48">
                 <ContextMenuItem
