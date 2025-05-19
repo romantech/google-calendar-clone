@@ -1,9 +1,17 @@
-import { addEvent, type CalendarEvent, useAppDispatch } from '@/store';
+import { addEvent, type CalendarEvent, removeEvent, useAppDispatch } from '@/store';
 
-import { calculateEventHeight, cn, eventStartsAtSlot, formatEventTime } from '@/lib';
+import { cn, eventStartsAtSlot } from '@/lib';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useState } from 'react';
 import EventForm from './event-form';
+import EventItem from './event-item';
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from '@/components/ui/context-menu';
+import { Trash2 } from 'lucide-react';
 
 interface TimeSlotProps {
   dayEvents: CalendarEvent[];
@@ -35,16 +43,21 @@ export default function TimeSlot({
           })}
         >
           {eventsStartingAtThisSlot.map((ev: CalendarEvent) => (
-            <div
-              key={ev.id}
-              className="absolute right-0 left-0 overflow-hidden rounded bg-blue-200 p-1"
-              style={{ height: `${calculateEventHeight(ev)}px`, zIndex: 10 }}
-            >
-              <div className="font-medium">{ev.title}</div>
-              <div className="text-xs text-gray-600">
-                {formatEventTime(ev.startTime)} - {formatEventTime(ev.endTime)}
-              </div>
-            </div>
+            <ContextMenu>
+              <ContextMenuTrigger>
+                <EventItem key={ev.id} event={ev} />
+              </ContextMenuTrigger>
+              <ContextMenuContent className="min-w-48">
+                <ContextMenuItem
+                  onClick={(e) => {
+                    dispatch(removeEvent(ev.id));
+                    e.stopPropagation();
+                  }}
+                >
+                  <Trash2 /> 삭제
+                </ContextMenuItem>
+              </ContextMenuContent>
+            </ContextMenu>
           ))}
         </div>
       </PopoverTrigger>
