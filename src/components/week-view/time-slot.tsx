@@ -51,7 +51,7 @@ export default function TimeSlot({ dayEvents, dateTimeSlot, isLastCol, isLastRow
                 <ContextMenuContent className="min-w-48">
                   <ContextMenuItem
                     onClick={(e) => {
-                      dispatch(removeEvent(ev.id));
+                      dispatch(removeEvent(ev.originalId ?? ev.id));
                       e.stopPropagation();
                     }}
                   >

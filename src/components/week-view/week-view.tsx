@@ -16,7 +16,7 @@ export default function WeekView() {
 
   return (
     <div className="flex size-full flex-col p-4">
-      {/* 고정된 헤더 부분 */}
+      {/* 고정 헤더 영역 */}
       <div>
         <WeekHeader days={days} />
         <TimeZoneRow days={days} />
