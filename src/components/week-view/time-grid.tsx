@@ -2,7 +2,7 @@ import type { CalendarEvent } from '@/store';
 import { Fragment } from 'react';
 import TimeLabel from './time-label';
 import TimeSlot from './time-slot';
-import { getEventsForDay } from '@/lib';
+import { combineDateAndTime, getEventsForDay } from '@/lib';
 
 interface TimeGridProps {
   days: Date[];
@@ -26,9 +26,10 @@ export default function TimeGrid({ days, events, timeSlots }: TimeGridProps) {
               <TimeSlot
                 key={`${day.toString()}-${rowIdx}`}
                 dayEvents={getEventsForDay(events, day)}
-                timeSlot={timeSlot}
                 isLastCol={dayIdx === days.length - 1}
                 isLastRow={rowIdx === timeSlots.length - 1}
+                dateTimeSlot={combineDateAndTime(day, timeSlot)}
+                timeSlots={timeSlots}
               />
             ))}
           </Fragment>

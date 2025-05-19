@@ -53,6 +53,15 @@ export const generateTimeSlots = ({
   });
 };
 
+/**
+ * @returns 날짜가 반영된 타임슬롯 Date 객체 반환
+ */
+export function combineDateAndTime(date: Date, time: Date): Date {
+  const combined = new Date(date);
+  combined.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
+  return combined;
+}
+
 interface GetWeekDaysOptions {
   /** 기준 날짜 */
   baseDate?: Date;

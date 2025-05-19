@@ -16,20 +16,7 @@ interface EventsState {
 }
 
 const initialState: EventsState = {
-  events: [
-    {
-      id: '1',
-      title: '회의',
-      startTime: '2025-05-19T10:00:00Z',
-      endTime: '2025-05-19T13:00:00Z',
-    },
-    {
-      id: '2',
-      title: '점심 약속',
-      startTime: '2025-05-20T08:00:00Z',
-      endTime: '2025-05-20T12:00:00Z',
-    },
-  ],
+  events: [],
 };
 
 export const eventsSlice = createSlice({
