@@ -31,7 +31,6 @@ export default function TimeGrid({ days, events, timeSlots }: TimeGridProps) {
                   isLastCol={dayIdx === days.length - 1}
                   isLastRow={rowIdx === timeSlots.length - 1}
                   dateTimeSlot={dateTimeSlot}
-                  timeSlots={timeSlots}
                 />
               );
             })}

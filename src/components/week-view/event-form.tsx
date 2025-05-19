@@ -41,7 +41,8 @@ interface EventFormProps {
   onSubmit: (event: CalendarEvent) => void;
   onCancel: () => void;
   onSave?: () => void;
-  timeSlots: Date[];
+  /** 선택한 날짜의 모든 시간슬롯 */
+  dateTimeSlots: Date[];
 }
 
 export default function EventForm({
@@ -49,11 +50,10 @@ export default function EventForm({
   onSubmit,
   onCancel,
   onSave,
-  timeSlots,
+  dateTimeSlots,
 }: EventFormProps) {
-  // timeSlots를 미리 포맷팅하여 저장
   const formattedTimeSlots = useRef(
-    timeSlots.map((slot) => ({
+    dateTimeSlots.map((slot) => ({
       date: slot,
       isoString: slot.toISOString(),
       formattedTime: format(slot, 'HH:mm'),
