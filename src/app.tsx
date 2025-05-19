@@ -1,11 +1,10 @@
-import { Calendar, Header } from '@/components';
-import { Sidebar } from '@/components/sidebar';
+import { Calendar, Header, Sidebar } from '@/components';
 
 function App() {
   return (
-    <main className="min-h-screen">
+    <main>
       <Header />
-      <div className="flex">
+      <div className="flex h-[calc(100vh-4rem)]">
         <Sidebar />
         <Calendar />
       </div>

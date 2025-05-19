@@ -1,2 +1,3 @@
-export { default as Calendar } from './calendar';
-export { default as Header } from './header/header.tsx';
+export * from './calendar';
+export * from './header';
+export * from './sidebar';

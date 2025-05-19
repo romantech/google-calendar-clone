@@ -3,11 +3,11 @@ import Navigator from './navigator';
 import MonthLabel from './month-label';
 import MenuToggle from './menu-toggle';
 import AppBrand from './app-brand';
-import Today from './today.tsx';
-import Search from './search.tsx';
-import Support from '@/components/header/support';
-import Settings from '@/components/header/settings';
-import ViewSwitcher from '@/components/header/view-switcher';
+import Today from './today';
+import Search from './search';
+import Support from './support';
+import Settings from './settings';
+import ViewSwitcher from './view-switcher';
 
 interface HeaderProps {
   className?: string;
