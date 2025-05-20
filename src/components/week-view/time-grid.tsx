@@ -2,7 +2,7 @@ import type { CalendarEvent } from '@/store';
 import { Fragment } from 'react';
 import TimeLabel from './time-label';
 import TimeSlot from './time-slot';
-import { combineDateAndTime, getEventsForDay } from '@/lib';
+import { cn, combineDateAndTime, getEventsForDay, VIEW_LAYOUT_CLASSES } from '@/lib';
 
 interface TimeGridProps {
   days: Date[];
@@ -13,7 +13,7 @@ interface TimeGridProps {
 export default function TimeGrid({ days, events, timeSlots }: TimeGridProps) {
   return (
     <div className="overflow-y-auto">
-      <div className="grid grid-cols-[4rem_0.625rem_repeat(7,minmax(5rem,_1fr))] grid-rows-[repeat(24,_3rem)]">
+      <div className={cn('grid grid-rows-[repeat(24,_3rem)]', VIEW_LAYOUT_CLASSES.week.timeGrid)}>
         {timeSlots.map((timeSlot, rowIdx) => (
           <Fragment key={timeSlot.getTime()}>
             <TimeLabel
