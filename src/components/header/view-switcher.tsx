@@ -9,11 +9,9 @@ interface ViewSwitcherProps {
 export default function ViewSwitcher({ className }: ViewSwitcherProps) {
   return (
     <Button
+      disabled
       variant="ghost"
-      className={cn(
-        'cursor-not-allowed rounded-full border border-gray-700 hover:bg-slate-200',
-        className,
-      )}
+      className={cn('rounded-full border border-gray-700 hover:bg-slate-200', className)}
       size="lg"
     >
       주

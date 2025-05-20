@@ -5,7 +5,7 @@ import WeekHeader from './week-header';
 import TimeZoneRow from './time-zone-row';
 import TimeGrid from './time-grid';
 
-const dailyTimeSlots = generateTimeSlots();
+const defaultTimeSlots = generateTimeSlots();
 
 export default function WeekView() {
   const selectedDate = useAppSelector(selectSelectedDate);
@@ -23,7 +23,7 @@ export default function WeekView() {
       </div>
 
       {/* 스크롤 가능한 타임슬롯 영역 */}
-      <TimeGrid days={days} events={events} timeSlots={dailyTimeSlots} />
+      <TimeGrid days={days} events={events} timeSlots={defaultTimeSlots} />
     </div>
   );
 }

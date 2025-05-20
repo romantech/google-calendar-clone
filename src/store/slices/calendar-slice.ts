@@ -2,15 +2,18 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '@/store';
 import type { ISOString } from '@/types';
 import { addWeeks, parseISO } from 'date-fns';
+import { getCurrentTimezoneInfo } from '@/lib';
 
 interface CalendarState {
   selectedDate: ISOString | null;
   selectedMonth: ISOString | null;
+  currentTimezone: ReturnType<typeof getCurrentTimezoneInfo>;
 }
 
 const initialState: CalendarState = {
   selectedDate: null,
   selectedMonth: new Date().toISOString(),
+  currentTimezone: getCurrentTimezoneInfo(),
 };
 
 export const calendarSlice = createSlice({
@@ -25,15 +28,13 @@ export const calendarSlice = createSlice({
     },
     moveToToday: (state) => {
       const today = new Date().toISOString();
-      state.selectedDate = today;
-      state.selectedMonth = today;
+      [state.selectedDate, state.selectedMonth] = [today, today];
     },
     moveWeek: (state, action: PayloadAction<number>) => {
       const offset = action.payload;
       const baseDate = state.selectedDate ? parseISO(state.selectedDate) : new Date();
-      const newDate = addWeeks(baseDate, offset);
-      state.selectedDate = newDate.toISOString();
-      state.selectedMonth = newDate.toISOString();
+      const newDate = addWeeks(baseDate, offset).toISOString();
+      [state.selectedDate, state.selectedMonth] = [newDate, newDate];
     },
   },
 });
@@ -41,4 +42,7 @@ export const calendarSlice = createSlice({
 export const { setSelectedDate, setSelectedMonth, moveToToday, moveWeek } = calendarSlice.actions;
 
 export const selectSelectedDate = (state: RootState) => state.calendar.selectedDate;
+
 export const selectSelectedMonth = (state: RootState) => state.calendar.selectedMonth;
+
+export const selectCurrentTimezoneInfo = (state: RootState) => state.calendar.currentTimezone;
