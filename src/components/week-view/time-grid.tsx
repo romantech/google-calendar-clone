@@ -2,7 +2,8 @@ import type { CalendarEvent } from '@/store';
 import { Fragment } from 'react';
 import TimeLabel from './time-label';
 import TimeSlot from './time-slot';
-import { combineDateAndTime, getEventsForDay, VIEW_LAYOUT_CLASSES } from '@/lib';
+import { combineDateAndTime, isSameDateTime, VIEW_LAYOUT_CLASSES } from '@/lib';
+import { parseISO } from 'date-fns';
 
 interface TimeGridProps {
   days: Date[];
@@ -24,13 +25,17 @@ export default function TimeGrid({ days, events, timeSlots }: TimeGridProps) {
 
             {days.map((day, dayIdx) => {
               const dateTimeSlot = combineDateAndTime(day, timeSlot);
+              const eventsStartingAtSlot = events.filter(({ startTime }) =>
+                isSameDateTime(parseISO(startTime), dateTimeSlot),
+              );
+
               return (
                 <TimeSlot
                   key={dateTimeSlot.getTime()}
-                  dayEvents={getEventsForDay(events, day)}
+                  slotEvents={eventsStartingAtSlot}
+                  dateTimeSlot={dateTimeSlot}
                   isLastCol={dayIdx === days.length - 1}
                   isLastRow={rowIdx === timeSlots.length - 1}
-                  dateTimeSlot={dateTimeSlot}
                 />
               );
             })}

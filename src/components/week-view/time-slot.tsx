@@ -1,5 +1,5 @@
 import { addEvent, type CalendarEvent, removeEvent, useAppDispatch } from '@/store';
-import { cn, eventStartsAtSlot, generateTimeSlots } from '@/lib';
+import { cn, generateTimeSlots } from '@/lib';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useState } from 'react';
 import EventForm from './event-form';
@@ -13,19 +13,23 @@ import {
 import { Trash2 } from 'lucide-react';
 
 interface TimeSlotProps {
-  dayEvents: CalendarEvent[];
+  slotEvents: CalendarEvent[];
   /** 선택한 날짜/시간대의 슬롯 */
   dateTimeSlot: Date;
   isLastCol: boolean;
   isLastRow: boolean;
 }
 
-export default function TimeSlot({ dayEvents, dateTimeSlot, isLastCol, isLastRow }: TimeSlotProps) {
+export default function TimeSlot({
+  slotEvents,
+  dateTimeSlot,
+  isLastCol,
+  isLastRow,
+}: TimeSlotProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useAppDispatch();
 
-  const eventsStartingAtThisSlot = dayEvents.filter((ev) => eventStartsAtSlot(ev, dateTimeSlot));
-  const numConcurrentEvents = eventsStartingAtThisSlot.length;
+  const numConcurrentEvents = slotEvents.length;
   const calculatedWidthPercent = numConcurrentEvents > 0 ? 100 / numConcurrentEvents : 100;
 
   return (
@@ -37,7 +41,7 @@ export default function TimeSlot({ dayEvents, dateTimeSlot, isLastCol, isLastRow
             'border-b': !isLastRow,
           })}
         >
-          {eventsStartingAtThisSlot.map((ev: CalendarEvent, index: number) => {
+          {slotEvents.map((ev: CalendarEvent, index: number) => {
             const eventLeftPercent = index * calculatedWidthPercent;
             return (
               <ContextMenu key={ev.id}>

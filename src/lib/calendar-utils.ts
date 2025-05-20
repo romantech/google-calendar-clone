@@ -3,9 +3,6 @@ import {
   addDays,
   addMinutes,
   differenceInMinutes,
-  getHours,
-  getMinutes,
-  isSameDay,
   parseISO,
   startOfDay,
   startOfWeek,
@@ -66,29 +63,6 @@ export function getWeekDays({
   const weekStart = startOfWeek(baseDate, { weekStartsOn });
   return Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 }
-
-/**
- * 특정 날짜에 해당하는 이벤트들을 필터링하는 함수
- * @returns 해당 날짜의 이벤트 배열
- */
-export const getEventsForDay = (events: CalendarEvent[], day: Date): CalendarEvent[] => {
-  return events.filter((e) => {
-    const eventDate = parseISO(e.startTime);
-    return isSameDay(eventDate, day);
-  });
-};
-
-/**
- * 이벤트의 시작 시간이 특정 슬롯에 해당하는지 확인하는 함수
- * @returns 이벤트가 해당 슬롯에서 시작하는지 여부
- * */
-export const eventStartsAtSlot = (event: CalendarEvent, slotTime: Date) => {
-  const eventStartDate = parseISO(event.startTime);
-  return (
-    getHours(eventStartDate) === getHours(slotTime) &&
-    getMinutes(eventStartDate) === getMinutes(slotTime)
-  );
-};
 
 /**
  * 이벤트의 높이를 계산하는 함수 (시간 길이에 비례)

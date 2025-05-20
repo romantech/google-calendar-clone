@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { format, isValid, parseISO } from 'date-fns';
+import { format, isSameDay, isSameHour, isSameMinute, isValid, parseISO } from 'date-fns';
 import { formatInTimeZone } from 'date-fns-tz';
 
 export const cn = (...inputs: ClassValue[]) => {
@@ -28,4 +28,11 @@ export const getCurrentTimezoneInfo = () => {
   // 예: "GMT+9", "GMT-7"
   const gmtOffset = formatInTimeZone(new Date(), ianaName, 'O');
   return { ianaName, gmtOffset };
+};
+
+/**
+ * 두 시각이 연-월-일 시:분 단위까지 정확히 같은지 확인
+ * */
+export const isSameDateTime = (source: Date | string, target: Date | string) => {
+  return isSameDay(source, target) && isSameHour(source, target) && isSameMinute(source, target);
 };
