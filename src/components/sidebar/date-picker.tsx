@@ -1,30 +1,22 @@
 import { DayPicker as ReactDatePicker } from 'react-day-picker';
 import 'react-day-picker/style.css';
-import { format, isSameDay, isToday } from 'date-fns';
+import { isSameDay, isToday } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import {
-  selectSelectedDate,
-  selectSelectedMonth,
   setSelectedDate,
   setSelectedMonth,
   useAppDispatch,
-  useAppSelector,
+  useSelectedDateAndMonth,
 } from '@/store';
-import { toDate } from '@/lib/utils';
-
-const formatCaption = (date: Date) => format(date, 'yyyy년 M월');
+import { formatYearMonth, toDate } from '@/lib/utils';
 
 export default function DatePicker() {
   const dispatch = useAppDispatch();
-  const selectedDate = useAppSelector(selectSelectedDate);
-  const selectedMonth = useAppSelector(selectSelectedMonth);
+  const { selectedDate, selectedMonth } = useSelectedDateAndMonth();
 
-  const onSelect = (date?: Date) => {
-    dispatch(setSelectedDate(date?.toISOString()));
-  };
-
-  const onMonthChange = (date?: Date) => {
-    dispatch(setSelectedMonth(date?.toISOString()));
+  const onChange = (date?: Date, from: 'select' | 'month' = 'select') => {
+    const setter = from === 'select' ? setSelectedDate : setSelectedMonth;
+    dispatch(setter(date?.toISOString()));
   };
 
   const isHoverable = (date: Date) => {
@@ -39,12 +31,12 @@ export default function DatePicker() {
       <ReactDatePicker
         animate
         locale={ko}
-        formatters={{ formatCaption }}
+        formatters={{ formatCaption: formatYearMonth }}
         mode="single"
         month={toDate(selectedMonth)}
         selected={toDate(selectedDate)}
-        onMonthChange={onMonthChange}
-        onSelect={onSelect}
+        onMonthChange={(date) => onChange(date, 'month')}
+        onSelect={(date) => onChange(date, 'select')}
         modifiers={{ hoverable: isHoverable }}
         modifiersClassNames={{ hoverable: 'hover:bg-slate-200' }}
         classNames={{

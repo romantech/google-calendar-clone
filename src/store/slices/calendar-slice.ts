@@ -25,15 +25,13 @@ export const calendarSlice = createSlice({
     },
     moveToToday: (state) => {
       const today = new Date().toISOString();
-      state.selectedDate = today;
-      state.selectedMonth = today;
+      [state.selectedDate, state.selectedMonth] = [today, today];
     },
     moveWeek: (state, action: PayloadAction<number>) => {
       const offset = action.payload;
       const baseDate = state.selectedDate ? parseISO(state.selectedDate) : new Date();
-      const newDate = addWeeks(baseDate, offset);
-      state.selectedDate = newDate.toISOString();
-      state.selectedMonth = newDate.toISOString();
+      const newDate = addWeeks(baseDate, offset).toISOString();
+      [state.selectedDate, state.selectedMonth] = [newDate, newDate];
     },
   },
 });

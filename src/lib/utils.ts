@@ -127,3 +127,5 @@ export function toDate(isoString?: string | null): Date | undefined {
   const date = parseISO(isoString);
   return isValid(date) ? date : undefined;
 }
+
+export const formatYearMonth = (date: Date) => format(date, 'yyyy년 M월');
