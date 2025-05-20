@@ -1,6 +1,6 @@
 import { DayPicker as ReactDatePicker } from 'react-day-picker';
 import 'react-day-picker/style.css';
-import { format, isSameDay, isToday } from 'date-fns'; // isToday 임포트
+import { format, isSameDay, isToday } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import {
   selectSelectedDate,
@@ -11,6 +11,8 @@ import {
   useAppSelector,
 } from '@/store';
 import { toDate } from '@/lib/utils';
+
+const formatCaption = (date: Date) => format(date, 'yyyy년 M월');
 
 export default function DatePicker() {
   const dispatch = useAppDispatch();
@@ -31,8 +33,6 @@ export default function DatePicker() {
     // 오늘 날짜가 아니고, 선택된 날짜도 아닌 경우에만 호버 배경 적용하기 위한 조건
     return !isToday(date) && !isSameDay(date, selected);
   };
-
-  const formatCaption = (date: Date) => format(date, 'yyyy년 M월');
 
   return (
     <section>

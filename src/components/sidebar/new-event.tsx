@@ -9,11 +9,9 @@ interface NewEventProps {
 export default function NewEvent({ className }: NewEventProps) {
   return (
     <Button
+      disabled
       variant="ghost"
-      className={cn(
-        'cursor-not-allowed rounded-lg border border-gray-700 p-6 hover:bg-slate-200',
-        className,
-      )}
+      className={cn('rounded-lg border border-gray-700 p-6 hover:bg-slate-200', className)}
     >
       <Plus />
       <span>만들기</span>

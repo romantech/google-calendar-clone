@@ -20,12 +20,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function toDate(isoString?: string | null): Date | undefined {
-  if (!isoString) return undefined;
-  const date = parseISO(isoString);
-  return isValid(date) ? date : undefined;
-}
-
 interface GenerateTimeSlots {
   intervalMinutes?: number;
   formatPattern?: string;
@@ -127,3 +121,9 @@ export const calculateEventHeight = (
 export const formatEventTime = (isoString: string, formatPattern = 'HH:mm') => {
   return format(parseISO(isoString), formatPattern);
 };
+
+export function toDate(isoString?: string | null): Date | undefined {
+  if (!isoString) return undefined;
+  const date = parseISO(isoString);
+  return isValid(date) ? date : undefined;
+}
