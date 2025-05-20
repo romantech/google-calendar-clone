@@ -1,5 +1,5 @@
 import { type CalendarEvent } from '@/store';
-import { calculateEventHeight, formatEventTime } from '@/lib';
+import { calculateEventHeight, formatISOString } from '@/lib';
 
 interface EventItemProps {
   event: CalendarEvent;
@@ -26,7 +26,7 @@ export default function EventItem({ event, widthPercent, leftPercent }: EventIte
     >
       <div className="font-medium">{event.title}</div>
       <div className="text-xs text-gray-600">
-        {formatEventTime(event.startTime)} - {formatEventTime(event.endTime)}
+        {formatISOString(event.startTime)} - {formatISOString(event.endTime)}
       </div>
     </div>
   );
