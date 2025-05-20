@@ -7,7 +7,10 @@ export const SLOT_HEIGHT = 48;
 
 export const VIEW_LAYOUT_CLASSES = {
   week: {
-    timeGrid: 'grid-cols-[4rem_0.625rem_repeat(7,minmax(5rem,_1fr))]',
-    timeZoneRow: 'grid-cols-[4rem_0.625rem_repeat(7,minmax(5rem,_1fr))_0.9375rem]',
+    // row 높이 3rem = SLOT_HEIGHT
+    timeGrid:
+      'grid grid-rows-[repeat(24,_3rem)] grid-cols-[4rem_0.625rem_repeat(7,minmax(5rem,_1fr))]',
+    timeZoneRow:
+      'grid auto-rows-[1.375rem] grid-cols-[4rem_0.625rem_repeat(7,minmax(5rem,_1fr))_0.9375rem]',
   },
 } as const;

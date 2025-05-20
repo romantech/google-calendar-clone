@@ -5,7 +5,7 @@ export default function TimeZoneRow({ days }: { days: Date[] }) {
   const { gmtOffset } = useAppSelector(selectCurrentTimezoneInfo);
 
   return (
-    <div className={cn('grid', VIEW_LAYOUT_CLASSES.week.timeZoneRow)}>
+    <div className={VIEW_LAYOUT_CLASSES.week.timeZoneRow}>
       <div className="justify-self-end pr-2 text-xs">{gmtOffset}</div>
       <div className="border-r border-b border-slate-200" /> {/* 시간 라벨 우측 경계용 셀 */}
       <div className="col-span-7 grid grid-cols-7 divide-x divide-slate-200 border-b">
