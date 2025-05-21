@@ -1,7 +1,7 @@
 import { addEvent, type CalendarEvent, removeEvent, useAppDispatch } from '@/store';
 import { cn, generateTimeSlots } from '@/lib';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { useState } from 'react';
+import { useRef } from 'react';
 import EventForm from './event-form';
 import EventItem from './event-item';
 import {
@@ -11,6 +11,7 @@ import {
   ContextMenuTrigger,
 } from '@/components/ui/context-menu';
 import { Trash2 } from 'lucide-react';
+import { useDisclosure } from '@/hooks';
 
 interface TimeSlotProps {
   slotEvents: CalendarEvent[];
@@ -26,14 +27,15 @@ export default function TimeSlot({
   isLastCol,
   isLastRow,
 }: TimeSlotProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const { open: isFormOpen, onOpenChange: setIsFormOpen } = useDisclosure();
+  const dateTimeSlots = useRef(generateTimeSlots({ baseDate: dateTimeSlot }));
   const dispatch = useAppDispatch();
 
-  const numConcurrentEvents = slotEvents.length;
-  const calculatedWidthPercent = numConcurrentEvents > 0 ? 100 / numConcurrentEvents : 100;
+  const numOfNestedEvents = slotEvents.length;
+  const calculatedWidthPercent = numOfNestedEvents > 0 ? 100 / numOfNestedEvents : 100;
 
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
+    <Popover open={isFormOpen} onOpenChange={setIsFormOpen}>
       <PopoverTrigger asChild>
         <div
           className={cn('relative cursor-pointer text-xs hover:bg-slate-100', {
@@ -73,9 +75,9 @@ export default function TimeSlot({
           <EventForm
             initialTime={dateTimeSlot}
             onSubmit={(e) => dispatch(addEvent(e))}
-            onCancel={() => setIsOpen(false)}
-            onSave={() => setIsOpen(false)}
-            dateTimeSlots={generateTimeSlots({ baseDate: dateTimeSlot })}
+            onCancel={() => setIsFormOpen(false)}
+            onSave={() => setIsFormOpen(false)}
+            dateTimeSlots={dateTimeSlots.current}
           />
         </div>
       </PopoverContent>
