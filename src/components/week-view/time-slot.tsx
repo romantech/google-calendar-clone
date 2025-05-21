@@ -1,5 +1,5 @@
 import { addEvent, type CalendarEvent, removeEvent, useAppDispatch } from '@/store';
-import { cn, generateTimeSlots } from '@/lib';
+import { calcEventPosition, calculateEventHeight, cn, generateTimeSlots } from '@/lib';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useRef } from 'react';
 import EventForm from './event-form';
@@ -29,10 +29,9 @@ export default function TimeSlot({
 }: TimeSlotProps) {
   const { open: isFormOpen, onOpenChange: setIsFormOpen } = useDisclosure();
   const dateTimeSlots = useRef(generateTimeSlots({ baseDate: dateTimeSlot }));
-  const dispatch = useAppDispatch();
 
-  const numOfNestedEvents = slotEvents.length;
-  const calculatedWidthPercent = numOfNestedEvents > 0 ? 100 / numOfNestedEvents : 100;
+  const dispatch = useAppDispatch();
+  const eventCount = slotEvents.length;
 
   return (
     <Popover open={isFormOpen} onOpenChange={setIsFormOpen}>
@@ -43,15 +42,16 @@ export default function TimeSlot({
             'border-b': !isLastRow,
           })}
         >
-          {slotEvents.map((ev: CalendarEvent, index: number) => {
-            const eventLeftPercent = index * calculatedWidthPercent;
+          {slotEvents.map((ev: CalendarEvent, evIdx: number) => {
+            const { leftPercent, widthPercent } = calcEventPosition(evIdx, eventCount);
+            const height = calculateEventHeight(ev);
+
             return (
               <ContextMenu key={ev.id}>
                 <ContextMenuTrigger>
                   <EventItem
                     event={ev}
-                    widthPercent={calculatedWidthPercent}
-                    leftPercent={eventLeftPercent}
+                    style={{ left: `${leftPercent}%`, width: `${widthPercent}%`, height }}
                   />
                 </ContextMenuTrigger>
                 <ContextMenuContent className="min-w-48">
