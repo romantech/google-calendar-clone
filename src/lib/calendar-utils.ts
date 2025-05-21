@@ -101,7 +101,6 @@ export const calcEventPosition = (eventIdx: number, totalEvents: number, overlap
   const baseWidth = 100 / totalEvents;
   const isLastEvent = eventIdx === totalEvents - 1;
 
-  // 마지막 이벤트(가장 오른쪽)는 상대적으로 너비 좁게 설정
   const widthPercent = isLastEvent ? baseWidth : baseWidth * overlapCoef;
   const leftPercent = (eventIdx / totalEvents) * 100;
 
@@ -110,5 +109,6 @@ export const calcEventPosition = (eventIdx: number, totalEvents: number, overlap
 
 export const sortEventsByEndTimeDesc = (events: CalendarEvent[]) =>
   events.toSorted((a, b) => {
+    //  compareDesc: 더 늦은 시간이 앞에 오도록 정렬 (내림차순)
     return compareDesc(parseISO(a.endTime), parseISO(b.endTime));
   });
