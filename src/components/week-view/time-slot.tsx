@@ -1,7 +1,13 @@
 import { addEvent, type CalendarEvent, removeEvent, useAppDispatch } from '@/store';
-import { cn, generateTimeSlots } from '@/lib';
+import {
+  calcEventHeight,
+  calcEventPosition,
+  cn,
+  generateTimeSlots,
+  sortEventsByEndTimeDesc,
+} from '@/lib';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { useState } from 'react';
+import { useRef } from 'react';
 import EventForm from './event-form';
 import EventItem from './event-item';
 import {
@@ -11,6 +17,7 @@ import {
   ContextMenuTrigger,
 } from '@/components/ui/context-menu';
 import { Trash2 } from 'lucide-react';
+import { useDisclosure } from '@/hooks';
 
 interface TimeSlotProps {
   slotEvents: CalendarEvent[];
@@ -26,45 +33,50 @@ export default function TimeSlot({
   isLastCol,
   isLastRow,
 }: TimeSlotProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useAppDispatch();
+  const { open: isFormOpen, onOpenChange: setIsFormOpen } = useDisclosure();
+  const dateTimeSlots = useRef(generateTimeSlots({ baseDate: dateTimeSlot }));
 
-  const numConcurrentEvents = slotEvents.length;
-  const calculatedWidthPercent = numConcurrentEvents > 0 ? 100 / numConcurrentEvents : 100;
+  const dispatch = useAppDispatch();
+  const eventCount = slotEvents.length;
 
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
+    <Popover open={isFormOpen} onOpenChange={setIsFormOpen}>
       <PopoverTrigger asChild>
         <div
-          className={cn('relative cursor-pointer text-xs hover:bg-slate-100', {
+          className={cn('relative cursor-pointer pr-3 text-xs hover:bg-slate-100', {
             'border-r': !isLastCol,
             'border-b': !isLastRow,
           })}
         >
-          {slotEvents.map((ev: CalendarEvent, index: number) => {
-            const eventLeftPercent = index * calculatedWidthPercent;
-            return (
-              <ContextMenu key={ev.id}>
-                <ContextMenuTrigger>
-                  <EventItem
-                    event={ev}
-                    widthPercent={calculatedWidthPercent}
-                    leftPercent={eventLeftPercent}
-                  />
-                </ContextMenuTrigger>
-                <ContextMenuContent className="min-w-48">
-                  <ContextMenuItem
-                    onClick={(e) => {
-                      dispatch(removeEvent(ev.originalId ?? ev.id));
-                      e.stopPropagation();
-                    }}
-                  >
-                    <Trash2 /> 삭제
-                  </ContextMenuItem>
-                </ContextMenuContent>
-              </ContextMenu>
-            );
-          })}
+          {/* 셀 우측에 새로운 이벤트 생성을 위한 클릭 공간을 만들기 위해 부모에 pr-3을 주고 감싸는 요소 하나 더 추가 */}
+          <div className="relative">
+            {/* 긴 이벤트를 더 왼쪽에 배치하기 위해 정렬 */}
+            {sortEventsByEndTimeDesc(slotEvents).map((ev: CalendarEvent, evIdx: number) => {
+              const { leftPercent, widthPercent } = calcEventPosition(evIdx, eventCount);
+              const height = calcEventHeight({ event: ev, offset: -1 }); // 이벤트 border 1px 이므로 offset -1 빼줌
+
+              return (
+                <ContextMenu key={ev.id}>
+                  <ContextMenuTrigger>
+                    <EventItem
+                      event={ev}
+                      style={{ left: `${leftPercent}%`, width: `${widthPercent}%`, height }}
+                    />
+                  </ContextMenuTrigger>
+                  <ContextMenuContent className="min-w-48">
+                    <ContextMenuItem
+                      onClick={(e) => {
+                        dispatch(removeEvent(ev.originalId ?? ev.id));
+                        e.stopPropagation();
+                      }}
+                    >
+                      <Trash2 /> 삭제
+                    </ContextMenuItem>
+                  </ContextMenuContent>
+                </ContextMenu>
+              );
+            })}
+          </div>
         </div>
       </PopoverTrigger>
       <PopoverContent className="min-w-60">
@@ -73,9 +85,9 @@ export default function TimeSlot({
           <EventForm
             initialTime={dateTimeSlot}
             onSubmit={(e) => dispatch(addEvent(e))}
-            onCancel={() => setIsOpen(false)}
-            onSave={() => setIsOpen(false)}
-            dateTimeSlots={generateTimeSlots({ baseDate: dateTimeSlot })}
+            onCancel={() => setIsFormOpen(false)}
+            onSave={() => setIsFormOpen(false)}
+            dateTimeSlots={dateTimeSlots.current}
           />
         </div>
       </PopoverContent>

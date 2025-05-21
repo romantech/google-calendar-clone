@@ -1,7 +1,8 @@
-import { MINUTES_IN_DAY, MINUTES_PER_SLOT, SLOT_HEIGHT } from '@/lib/constant.ts';
+import { MINUTES_IN_DAY, MINUTES_PER_SLOT, SLOT_HEIGHT } from './constant';
 import {
   addDays,
   addMinutes,
+  compareDesc,
   differenceInMinutes,
   parseISO,
   startOfDay,
@@ -24,7 +25,8 @@ export const generateTimeSlots = ({
   baseDate = new Date(),
 }: GenerateTimeSlots = {}): Date[] => {
   if (MINUTES_IN_DAY % intervalMinutes !== 0) {
-    throw new Error(`intervalMinute 값은 하루 1440(분)을 균등하게 나눌 수 있어야 합니다.`);
+    const errMsg = `intervalMinute 값은 하루 ${MINUTES_IN_DAY}(분)을 균등하게 나눌 수 있어야 합니다.`;
+    throw new Error(errMsg);
   }
 
   const count = MINUTES_IN_DAY / intervalMinutes;
@@ -64,18 +66,49 @@ export function getWeekDays({
   return Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 }
 
+interface CalculateEventHeight {
+  event: CalendarEvent;
+  minutesPerSlot?: number;
+  slotHeight?: number;
+  /** 계산한 높이에 추가로 더하거나 뺄 보정값(px) */
+  offset?: number;
+}
+
 /**
  * 이벤트의 높이를 계산하는 함수 (시간 길이에 비례)
  * @returns 이벤트 높이 (픽셀)
  */
-export const calculateEventHeight = (
-  event: CalendarEvent,
+export const calcEventHeight = ({
+  event,
   minutesPerSlot = MINUTES_PER_SLOT,
   slotHeight = SLOT_HEIGHT,
-): number => {
+  offset = 0,
+}: CalculateEventHeight) => {
   const startDate = parseISO(event.startTime);
   const endDate = parseISO(event.endTime);
 
   const durationInMinutes = Math.max(0, differenceInMinutes(endDate, startDate));
-  return (durationInMinutes / minutesPerSlot) * slotHeight;
+  return (durationInMinutes / minutesPerSlot) * slotHeight + offset;
 };
+
+/**
+ * 슬롯 내 이벤트의 너비(%)와 왼쪽 위치(%) 계산
+ * @param eventIdx   - 타임슬롯내 이벤트 목록에서 해당 이벤트의 인덱스
+ * @param totalEvents - 전체 이벤트 개수
+ * @param overlapCoef - 마지막이 아닌 이벤트에 곱할 계수(변수 앞에 곱해진 수). 기본값 1.7
+ */
+export const calcEventPosition = (eventIdx: number, totalEvents: number, overlapCoef = 1.7) => {
+  const baseWidth = 100 / totalEvents;
+  const isLastEvent = eventIdx === totalEvents - 1;
+
+  const widthPercent = isLastEvent ? baseWidth : baseWidth * overlapCoef;
+  const leftPercent = (eventIdx / totalEvents) * 100;
+
+  return { widthPercent, leftPercent };
+};
+
+export const sortEventsByEndTimeDesc = (events: CalendarEvent[]) =>
+  events.toSorted((a, b) => {
+    //  compareDesc: 더 늦은 시간이 앞에 오도록 정렬 (내림차순)
+    return compareDesc(parseISO(a.endTime), parseISO(b.endTime));
+  });
