@@ -37,36 +37,39 @@ export default function TimeSlot({
     <Popover open={isFormOpen} onOpenChange={setIsFormOpen}>
       <PopoverTrigger asChild>
         <div
-          className={cn('relative cursor-pointer text-xs hover:bg-slate-100', {
+          className={cn('relative cursor-pointer pr-3 text-xs hover:bg-slate-100', {
             'border-r': !isLastCol,
             'border-b': !isLastRow,
           })}
         >
-          {slotEvents.map((ev: CalendarEvent, evIdx: number) => {
-            const { leftPercent, widthPercent } = calcEventPosition(evIdx, eventCount);
-            const height = calculateEventHeight(ev);
+          {/* 셀 우측에 새로운 이벤트 생성을 위한 클릭 공간을 만들기 위해 부모에 pr-3을 주고 감싸는 요소 하나 더 추가 */}
+          <div className="relative">
+            {slotEvents.map((ev: CalendarEvent, evIdx: number) => {
+              const { leftPercent, widthPercent } = calcEventPosition(evIdx, eventCount);
+              const height = calculateEventHeight({ event: ev, offset: -1 }); // 이벤트 border 1px 이므로 offset -1 빼줌
 
-            return (
-              <ContextMenu key={ev.id}>
-                <ContextMenuTrigger>
-                  <EventItem
-                    event={ev}
-                    style={{ left: `${leftPercent}%`, width: `${widthPercent}%`, height }}
-                  />
-                </ContextMenuTrigger>
-                <ContextMenuContent className="min-w-48">
-                  <ContextMenuItem
-                    onClick={(e) => {
-                      dispatch(removeEvent(ev.originalId ?? ev.id));
-                      e.stopPropagation();
-                    }}
-                  >
-                    <Trash2 /> 삭제
-                  </ContextMenuItem>
-                </ContextMenuContent>
-              </ContextMenu>
-            );
-          })}
+              return (
+                <ContextMenu key={ev.id}>
+                  <ContextMenuTrigger>
+                    <EventItem
+                      event={ev}
+                      style={{ left: `${leftPercent}%`, width: `${widthPercent}%`, height }}
+                    />
+                  </ContextMenuTrigger>
+                  <ContextMenuContent className="min-w-48">
+                    <ContextMenuItem
+                      onClick={(e) => {
+                        dispatch(removeEvent(ev.originalId ?? ev.id));
+                        e.stopPropagation();
+                      }}
+                    >
+                      <Trash2 /> 삭제
+                    </ContextMenuItem>
+                  </ContextMenuContent>
+                </ContextMenu>
+              );
+            })}
+          </div>
         </div>
       </PopoverTrigger>
       <PopoverContent className="min-w-60">

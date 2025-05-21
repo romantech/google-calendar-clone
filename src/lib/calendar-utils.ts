@@ -65,20 +65,29 @@ export function getWeekDays({
   return Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 }
 
+interface CalculateEventHeight {
+  event: CalendarEvent;
+  minutesPerSlot?: number;
+  slotHeight?: number;
+  /** 계산한 높이에 추가로 더하거나 뺄 보정값(px) */
+  offset?: number;
+}
+
 /**
  * 이벤트의 높이를 계산하는 함수 (시간 길이에 비례)
  * @returns 이벤트 높이 (픽셀)
  */
-export const calculateEventHeight = (
-  event: CalendarEvent,
+export const calculateEventHeight = ({
+  event,
   minutesPerSlot = MINUTES_PER_SLOT,
   slotHeight = SLOT_HEIGHT,
-): number => {
+  offset = 0,
+}: CalculateEventHeight) => {
   const startDate = parseISO(event.startTime);
   const endDate = parseISO(event.endTime);
 
   const durationInMinutes = Math.max(0, differenceInMinutes(endDate, startDate));
-  return (durationInMinutes / minutesPerSlot) * slotHeight;
+  return (durationInMinutes / minutesPerSlot) * slotHeight + offset;
 };
 
 /**
