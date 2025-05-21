@@ -1,7 +1,7 @@
 import { cn, VIEW_LAYOUT_CLASSES } from '@/lib';
 import { selectCurrentTimezoneInfo, useAppSelector } from '@/store';
 
-export default function TimeZoneRow({ days }: { days: Date[] }) {
+export default function AllDayRow({ days }: { days: Date[] }) {
   const { gmtOffset } = useAppSelector(selectCurrentTimezoneInfo);
 
   return (

@@ -92,15 +92,16 @@ export const calcEventHeight = ({
 };
 
 /**
- * 슬롯 내 이벤트의 너비(%)와 왼쪽 위치(%)를 계산
- * @param eventIdx   - 이벤트의 0부터 시작하는 인덱스
+ * 슬롯 내 이벤트의 너비(%)와 왼쪽 위치(%) 계산
+ * @param eventIdx   - 타임슬롯내 이벤트 목록에서 해당 이벤트의 인덱스
  * @param totalEvents - 전체 이벤트 개수
- * @param overlapCoef - 비마지막 이벤트에 곱할 겹침 계수 (기본값 1.7)
+ * @param overlapCoef - 마지막이 아닌 이벤트에 곱할 계수(변수 앞에 곱해진 수). 기본값 1.7
  */
 export const calcEventPosition = (eventIdx: number, totalEvents: number, overlapCoef = 1.7) => {
   const baseWidth = 100 / totalEvents;
   const isLastEvent = eventIdx === totalEvents - 1;
 
+  // 마지막 이벤트(가장 오른쪽)는 상대적으로 너비 좁게 설정
   const widthPercent = isLastEvent ? baseWidth : baseWidth * overlapCoef;
   const leftPercent = (eventIdx / totalEvents) * 100;
 
