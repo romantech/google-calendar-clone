@@ -2,6 +2,7 @@ import { MINUTES_IN_DAY, MINUTES_PER_SLOT, SLOT_HEIGHT } from './constant';
 import {
   addDays,
   addMinutes,
+  compareDesc,
   differenceInMinutes,
   parseISO,
   startOfDay,
@@ -77,7 +78,7 @@ interface CalculateEventHeight {
  * 이벤트의 높이를 계산하는 함수 (시간 길이에 비례)
  * @returns 이벤트 높이 (픽셀)
  */
-export const calculateEventHeight = ({
+export const calcEventHeight = ({
   event,
   minutesPerSlot = MINUTES_PER_SLOT,
   slotHeight = SLOT_HEIGHT,
@@ -105,3 +106,8 @@ export const calcEventPosition = (eventIdx: number, totalEvents: number, overlap
 
   return { widthPercent, leftPercent };
 };
+
+export const sortEventsByEndTimeDesc = (events: CalendarEvent[]) =>
+  events.toSorted((a, b) => {
+    return compareDesc(parseISO(a.endTime), parseISO(b.endTime));
+  });

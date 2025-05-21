@@ -1,5 +1,11 @@
 import { addEvent, type CalendarEvent, removeEvent, useAppDispatch } from '@/store';
-import { calcEventPosition, calculateEventHeight, cn, generateTimeSlots } from '@/lib';
+import {
+  calcEventHeight,
+  calcEventPosition,
+  cn,
+  generateTimeSlots,
+  sortEventsByEndTimeDesc,
+} from '@/lib';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useRef } from 'react';
 import EventForm from './event-form';
@@ -44,9 +50,10 @@ export default function TimeSlot({
         >
           {/* 셀 우측에 새로운 이벤트 생성을 위한 클릭 공간을 만들기 위해 부모에 pr-3을 주고 감싸는 요소 하나 더 추가 */}
           <div className="relative">
-            {slotEvents.map((ev: CalendarEvent, evIdx: number) => {
+            {/* 긴 이벤트를 더 왼쪽에 배치하기 위해 정렬 */}
+            {sortEventsByEndTimeDesc(slotEvents).map((ev: CalendarEvent, evIdx: number) => {
               const { leftPercent, widthPercent } = calcEventPosition(evIdx, eventCount);
-              const height = calculateEventHeight({ event: ev, offset: -1 }); // 이벤트 border 1px 이므로 offset -1 빼줌
+              const height = calcEventHeight({ event: ev, offset: -1 }); // 이벤트 border 1px 이므로 offset -1 빼줌
 
               return (
                 <ContextMenu key={ev.id}>
