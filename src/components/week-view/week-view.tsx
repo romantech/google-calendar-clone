@@ -23,7 +23,7 @@ export default function WeekView() {
       </div>
 
       {/* 스크롤 가능한 타임슬롯 영역 */}
-      <TimeGrid days={days} events={events} timeSlots={defaultTimeSlots} />
+      <TimeGrid days={days} events={events} dailyTimeSlots={defaultTimeSlots} />
     </div>
   );
 }

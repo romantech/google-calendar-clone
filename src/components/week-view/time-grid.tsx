@@ -8,23 +8,25 @@ import { parseISO } from 'date-fns';
 interface TimeGridProps {
   days: Date[];
   events: CalendarEvent[];
-  timeSlots: Date[];
+  /** n시간 간격의 1일 타임슬롯 목록 e.g., 00:00 ~ 23:00 */
+  dailyTimeSlots: Date[];
 }
 
-export default function TimeGrid({ days, events, timeSlots }: TimeGridProps) {
+export default function TimeGrid({ days, events, dailyTimeSlots }: TimeGridProps) {
   return (
     <div className="overflow-y-auto">
       <div className={VIEW_LAYOUT_CLASSES.week.timeGrid}>
-        {timeSlots.map((timeSlot, rowIdx) => (
-          <Fragment key={timeSlot.getTime()}>
+        {dailyTimeSlots.map((dailyTimeSlot, timeSlotIdx) => (
+          <Fragment key={dailyTimeSlot.getTime()}>
             <TimeLabel
-              timeSlot={timeSlot}
-              isFirstRow={rowIdx === 0}
-              isLastRow={rowIdx === timeSlots.length - 1}
+              timeSlot={dailyTimeSlot}
+              isFirstRow={timeSlotIdx === 0}
+              isLastRow={timeSlotIdx === dailyTimeSlots.length - 1}
             />
 
+            {/* 월요일~일요일 순서대로 각 날짜 열 렌더링  */}
             {days.map((day, dayIdx) => {
-              const dateTimeSlot = combineDateAndTime(day, timeSlot);
+              const dateTimeSlot = combineDateAndTime(day, dailyTimeSlot);
               const eventsStartingAtSlot = events.filter(({ startTime }) =>
                 isSameDateTime(parseISO(startTime), dateTimeSlot),
               );
@@ -35,7 +37,7 @@ export default function TimeGrid({ days, events, timeSlots }: TimeGridProps) {
                   slotEvents={eventsStartingAtSlot}
                   dateTimeSlot={dateTimeSlot}
                   isLastCol={dayIdx === days.length - 1}
-                  isLastRow={rowIdx === timeSlots.length - 1}
+                  isLastRow={timeSlotIdx === dailyTimeSlots.length - 1}
                 />
               );
             })}

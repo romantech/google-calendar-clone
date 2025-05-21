@@ -24,7 +24,8 @@ export const generateTimeSlots = ({
   baseDate = new Date(),
 }: GenerateTimeSlots = {}): Date[] => {
   if (MINUTES_IN_DAY % intervalMinutes !== 0) {
-    throw new Error(`intervalMinute 값은 하루 1440(분)을 균등하게 나눌 수 있어야 합니다.`);
+    const errMsg = `intervalMinute 값은 하루 ${MINUTES_IN_DAY}(분)을 균등하게 나눌 수 있어야 합니다.`;
+    throw new Error(errMsg);
   }
 
   const count = MINUTES_IN_DAY / intervalMinutes;
