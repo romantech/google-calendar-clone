@@ -16,6 +16,7 @@ export interface CalendarEvent {
   recurrence: RecurrenceType;
   rruleString?: string;
   originalId?: string;
+  /** 이벤트 객체가 원본(master)가 아닌, 반복 규칙(rrule)에 의해 생성된 개별 인스턴스 여부 */
   isOccurrence?: boolean;
 }
 
