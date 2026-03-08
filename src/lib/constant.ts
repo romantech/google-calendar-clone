@@ -10,7 +10,6 @@ export const VIEW_LAYOUT_CLASSES = {
     // row 높이 3rem = SLOT_HEIGHT
     timeGrid:
       'grid grid-rows-[repeat(24,_3rem)] grid-cols-[4rem_0.625rem_repeat(7,minmax(5rem,_1fr))]',
-    timeZoneRow:
-      'grid auto-rows-[1.375rem] grid-cols-[4rem_0.625rem_repeat(7,minmax(5rem,_1fr))_0.9375rem]',
+    timeZoneRow: 'grid auto-rows-[1.375rem] grid-cols-[4rem_0.625rem_repeat(7,minmax(5rem,_1fr))]',
   },
 } as const;

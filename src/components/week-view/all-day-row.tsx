@@ -13,8 +13,6 @@ export default function AllDayRow({ days }: { days: Date[] }) {
           <div key={day.toString()} className={cn('cursor-pointer hover:bg-slate-100')} />
         ))}
       </div>
-      {/* 타임슬롯 스크롤 때문에 생긴 영역 맞추기 위한 빈 셀 */}
-      <div className="border-b border-l" />
     </div>
   );
 }
