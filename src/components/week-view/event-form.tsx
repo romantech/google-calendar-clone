@@ -22,7 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useRef } from 'react';
 
 const recurrenceLabels: Record<RecurrenceType, string> = {
   none: '반복 안 함',
@@ -60,13 +59,11 @@ export default function EventForm({
   onSave,
   dateTimeSlots,
 }: EventFormProps) {
-  const formattedTimeSlots = useRef(
-    dateTimeSlots.map((slot) => ({
-      date: slot,
-      isoString: slot.toISOString(),
-      formattedTime: format(slot, 'HH:mm'),
-    })),
-  );
+  const formattedTimeSlots = dateTimeSlots.map((slot) => ({
+    date: slot,
+    isoString: slot.toISOString(),
+    formattedTime: format(slot, 'HH:mm'),
+  }));
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -111,7 +108,7 @@ export default function EventForm({
             control={form.control}
             name="startTime"
             label="시작 시간"
-            timeSlots={formattedTimeSlots.current}
+            timeSlots={formattedTimeSlots}
             placeholder="시작 시간"
           />
 
@@ -119,7 +116,7 @@ export default function EventForm({
             control={form.control}
             name="endTime"
             label="종료 시간"
-            timeSlots={formattedTimeSlots.current}
+            timeSlots={formattedTimeSlots}
             placeholder="종료 시간"
           />
         </div>

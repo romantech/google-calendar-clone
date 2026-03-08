@@ -7,7 +7,6 @@ import {
   sortEventsByEndTimeDesc,
 } from '@/lib';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { useRef } from 'react';
 import EventForm from './event-form';
 import EventItem from './event-item';
 import {
@@ -34,7 +33,7 @@ export default function TimeSlot({
   isLastRow,
 }: TimeSlotProps) {
   const { open: isFormOpen, onOpenChange: setIsFormOpen } = useDisclosure();
-  const dateTimeSlots = useRef(generateTimeSlots({ baseDate: dateTimeSlot }));
+  const dateTimeSlots = generateTimeSlots({ baseDate: dateTimeSlot });
 
   const dispatch = useAppDispatch();
   const eventCount = slotEvents.length;
@@ -87,7 +86,7 @@ export default function TimeSlot({
             onSubmit={(e) => dispatch(addEvent(e))}
             onCancel={() => setIsFormOpen(false)}
             onSave={() => setIsFormOpen(false)}
-            dateTimeSlots={dateTimeSlots.current}
+            dateTimeSlots={dateTimeSlots}
           />
         </div>
       </PopoverContent>
